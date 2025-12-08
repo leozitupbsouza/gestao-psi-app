@@ -20,7 +20,7 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
             --radius: 12px; 
-            --container-width: 1000px; /* Largura contida para leitura confortável */
+            --container-width: 1000px;
         }
 
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -36,11 +36,9 @@
             overflow: hidden; 
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         /* Login */
         #login-screen { position: fixed; inset: 0; background: var(--bg-body); display: flex; justify-content: center; align-items: center; z-index: 2000; }
@@ -48,7 +46,7 @@
         .login-input { width: 100%; padding: 18px; margin: 20px 0; border: 2px solid var(--border-color); border-radius: var(--radius); font-size: 16px; text-align: center; background: #f8fafc; }
         .login-input:focus { border-color: var(--primary); background: white; }
         
-        /* Header Principal */
+        /* Header */
         header { 
             background: var(--bg-surface); height: 70px; 
             border-bottom: 1px solid var(--border-color); 
@@ -63,65 +61,39 @@
         #header-school { display: none; width: 100%; justify-content: space-between; align-items: center; }
         #current-school-name { font-size: 1.2rem; font-weight: 700; margin: 0 15px; text-align: center; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Conteúdo Principal Scrollável */
+        /* Conteúdo */
         #app-content { flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth; }
 
-        /* --- DASHBOARD (Lista de Escolas) --- */
+        /* Dashboard */
         #dashboard-view { padding: 40px 20px; }
         .container-center { max-width: 1200px; margin: 0 auto; }
         .section-header { text-align: center; margin-bottom: 40px; }
         .section-header h2 { font-size: 1.8rem; margin: 0 0 8px 0; }
         .school-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         .school-card { background: var(--bg-surface); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; box-shadow: var(--shadow-sm); }
-        .school-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--primary); }
-
-        /* --- VISÃO DA ESCOLA (Abas no Topo) --- */
+        
+        /* Visão Escola */
         #school-view { display: none; flex-direction: column; height: 100%; }
+        .week-bar-container { background: var(--bg-surface); border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; padding: 0 20px; flex-shrink: 0; position: sticky; top: 0; z-index: 15; }
+        .week-bar { display: flex; gap: 10px; overflow-x: auto; max-width: var(--container-width); width: 100%; padding: 15px 0; scrollbar-width: none; align-items: center; }
+        .week-tab { padding: 8px 20px; background: transparent; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); border: 1px solid transparent; white-space: nowrap; transition: 0.2s; flex-shrink: 0; }
+        .week-tab.active { background: var(--primary-soft); color: var(--primary-dark); font-weight: 700; border-color: var(--primary-soft); }
         
-        /* Barra de Semanas (Topo) */
-        .week-bar-container {
-            background: var(--bg-surface); border-bottom: 1px solid var(--border-color);
-            display: flex; justify-content: center; padding: 0 20px;
-            flex-shrink: 0; position: sticky; top: 0; z-index: 15;
-            box-shadow: 0 4px 6px -4px rgba(0,0,0,0.05);
-        }
-        .week-bar { 
-            display: flex; gap: 10px; overflow-x: auto; 
-            max-width: var(--container-width); width: 100%; padding: 15px 0;
-            scrollbar-width: none; align-items: center;
-        }
-        .week-tab { 
-            padding: 8px 20px; background: transparent; border-radius: 50px; 
-            cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); 
-            border: 1px solid transparent; white-space: nowrap; transition: 0.2s; flex-shrink: 0;
-        }
-        .week-tab:hover { background: #f8fafc; color: var(--primary); }
-        .week-tab.active { 
-            background: var(--primary-soft); color: var(--primary-dark); 
-            font-weight: 700; border-color: var(--primary-soft);
-        }
-        
-        /* Área do Formulário */
         .content-scroll { flex: 1; padding: 40px 20px; display: flex; justify-content: center; }
         .form-container { width: 100%; max-width: 900px; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
 
-        /* Inputs */
+        /* Inputs & Seções (Visual Restaurado) */
         .week-title-editor { width: 100%; font-size: 1.8rem; font-weight: 700; border: none; background: transparent; text-align: center; margin-bottom: 40px; color: var(--text-main); font-family: 'Inter', sans-serif;}
         .section-card { background: var(--bg-surface); border-radius: var(--radius); padding: 35px; margin-bottom: 30px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
+        
         .section-title { color: var(--primary-dark); font-weight: 700; margin-bottom: 25px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; display: flex; align-items: center; gap: 15px; }
         .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
         
         .form-group { margin-bottom: 25px; }
         label { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 10px; }
-        
-        input[type="text"], textarea, input[type="number"], input[type="time"] { 
-            width: 100%; padding: 14px; border: 1px solid var(--border-color); 
-            border-radius: 10px; background: #f8fafc; font-size: 1rem; color: var(--text-main); 
-            font-family: 'Inter', sans-serif; transition: 0.2s; -webkit-appearance: none;
-        }
+        input[type="text"], textarea, input[type="number"], input[type="time"] { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; background: #f8fafc; font-size: 1rem; color: var(--text-main); font-family: 'Inter', sans-serif; transition: 0.2s; -webkit-appearance: none; }
         input:focus, textarea:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
-
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         .checkbox-group { display: flex; gap: 20px; flex-wrap: wrap; background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); }
         .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; }
@@ -136,15 +108,23 @@
         .btn-outline { background: white; border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
         .btn-ghost { background: transparent; border: none; cursor: pointer; color: var(--text-muted); padding: 8px 12px; font-size: 0.95rem; }
         .btn-danger { background: #fee2e2; color: #ef4444; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+        
+        /* Botão Salvar Especial */
+        .btn-save { background: #1e293b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: var(--shadow-sm); }
+        .btn-save:active { transform: scale(0.95); }
 
         /* Agenda & Ponto */
         .toggle-view-btn { background: #f1f5f9; color: var(--text-muted); padding: 8px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; display:flex; gap:8px; align-items:center; }
         .toggle-view-btn.active { background: var(--text-main); color: white; }
-        .agenda-nav { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 30px; background: white; padding: 10px; border-radius: 50px; border: 1px solid var(--border-color); max-width: 500px; margin: 0 auto; box-shadow: var(--shadow-sm); }
+        
+        .agenda-controls { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        .agenda-nav { display: flex; justify-content: center; align-items: center; gap: 20px; background: white; padding: 10px; border-radius: 50px; border: 1px solid var(--border-color); width: 100%; box-shadow: var(--shadow-sm); }
+        
+        .week-history-selector { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: white; font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-main); }
         
         .metrics-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .metric-box { background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); text-align: center; box-shadow: var(--shadow-sm); }
-        
         .timesheet-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
         .ts-row { background: white; box-shadow: var(--shadow-sm); border-radius: 12px; }
         .ts-row td { padding: 15px; vertical-align: middle; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
@@ -152,20 +132,26 @@
         .ts-row td:last-child { border-right: 1px solid var(--border-color); border-radius: 0 12px 12px 0; }
         .ts-input { text-align: center; width: 100%; border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; }
 
-        /* Modal */
+        /* Modal & Toast */
         #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 3000; justify-content: center; align-items: center; }
         .modal-card { background: white; width: 90%; max-width: 600px; max-height: 85vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
         .modal-body { flex: 1; overflow-y: auto; padding: 25px; background: #f8fafc; }
         .meeting-item { background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 15px; box-shadow: var(--shadow-sm); }
 
-        /* --- RESPONSIVIDADE MOBILE/TABLET --- */
+        #toast-notification {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #1e293b; color: white; padding: 12px 24px; border-radius: 50px;
+            font-weight: 600; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex; align-items: center; gap: 10px; z-index: 5000;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        #toast-notification.show { opacity: 1; top: 40px; }
+
         @media (max-width: 1024px) {
             .login-box { width: 85%; padding: 2rem; }
-            .week-bar { padding: 10px 0; } /* Ajuste fino mobile */
+            .week-bar { padding: 10px 0; }
             .section-card { padding: 25px; }
             .grid-2 { grid-template-columns: 1fr; }
-            
-            /* Tabela vira Card no Mobile */
             .timesheet-table thead { display: none; }
             .timesheet-table, tbody, tr, td { display: block; width: 100%; }
             .ts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; height: auto; margin-bottom: 15px; }
@@ -178,6 +164,8 @@
     </style>
 </head>
 <body>
+
+    <div id="toast-notification"><i class="fas fa-check-circle" style="color:#4ade80"></i> Alterações Salvas!</div>
 
     <div id="login-screen">
         <div class="login-box">
@@ -198,20 +186,24 @@
                         <i class="fas fa-shapes" style="color:var(--primary)"></i> Gestão Psi
                     </div>
                     
-                    <div style="display:flex; background:#f1f5f9; padding:4px; border-radius:50px;">
+                    <div style="display:flex; background:#f1f5f9; padding:4px; border-radius:50px; margin: 0 10px;">
                         <button id="btn-view-schools" class="toggle-view-btn active" onclick="switchMainView('schools')"><i class="fas fa-book"></i> <span style="margin-left:5px">Diários</span></button>
                         <button id="btn-view-agenda" class="toggle-view-btn" onclick="switchMainView('agenda')"><i class="far fa-clock"></i> <span style="margin-left:5px">Ponto</span></button>
                     </div>
+
+                    <button class="btn-save" onclick="saveManual()"><i class="fas fa-save"></i> Salvar</button>
                 </div>
 
                 <div id="header-school">
-                    <button class="btn-outline" onclick="showDashboard()" title="Voltar">
-                        <i class="fas fa-arrow-left"></i> Voltar
-                    </button>
-                    
-                    <h2 id="current-school-name">Nome da Escola</h2>
+                    <div style="display:flex; align-items:center;">
+                        <button class="btn-outline" onclick="showDashboard()" title="Voltar" style="margin-right:10px;">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2 id="current-school-name" style="margin:0; font-size:1.1rem; max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Escola</h2>
+                    </div>
                     
                     <div style="display:flex; gap:8px;">
+                        <button class="btn-save" onclick="saveManual()"><i class="fas fa-save"></i> Salvar</button>
                         <button class="btn-outline" onclick="openMeetings()"><i class="fas fa-users-cog"></i></button>
                         <button class="btn-danger" onclick="deleteSchool()"><i class="fas fa-trash-alt"></i></button>
                     </div>
@@ -242,10 +234,16 @@
                         <h2>Controle de Ponto</h2>
                     </div>
 
-                    <div class="agenda-nav">
-                        <button class="btn-ghost" onclick="changeWeek(-1)"><i class="fas fa-chevron-left"></i></button>
-                        <div id="agenda-current-week-display" style="font-weight: 700; min-width: 140px; text-align: center;">Semana Atual</div>
-                        <button class="btn-ghost" onclick="changeWeek(1)"><i class="fas fa-chevron-right"></i></button>
+                    <div class="agenda-controls">
+                        <select id="week-history-selector" class="week-history-selector" onchange="jumpToWeek(this.value)">
+                            <option value="">Carregando histórico...</option>
+                        </select>
+
+                        <div class="agenda-nav">
+                            <button class="btn-ghost" onclick="changeWeek(-1)"><i class="fas fa-chevron-left"></i></button>
+                            <div id="agenda-current-week-display" style="font-weight: 700; min-width: 140px; text-align: center;">Semana Atual</div>
+                            <button class="btn-ghost" onclick="changeWeek(1)"><i class="fas fa-chevron-right"></i></button>
+                        </div>
                     </div>
 
                     <div class="metrics-container">
@@ -333,50 +331,39 @@
 
     <script>
         // ==========================================
-        // LÓGICA DO SISTEMA (COMPLETA E RESTAURADA)
+        // LÓGICA DO SISTEMA
         // ==========================================
 
         document.getElementById('password-input').addEventListener('keypress', (e) => {
             if(e.key === 'Enter') checkPassword();
         });
 
-        // ---------------- MODELOS COMPLETOS (NÃO APAGAR) ----------------
-
-        // SEMANA 1: Identificação, Infraestrutura, Demandas
+        // MODELOS DE DADOS COMPLETOS (RESTAURADOS)
         const modeloSemana1 = { 
             type: 's1', 
             data: { 
-                // Seção 1: Identificação
                 nome: '', endereco: '', 
                 niveis: {infantil:false, fund1:false, fund2:false, medio:false, eja:false}, 
                 alunos: '', turmas: '', 
                 turnos: {mat:false, vesp:false, not:false, int:false}, 
                 diretor: '', coord: '', orientador: '', 
-                // Seção 2: Infraestrutura
                 condicoes: '', espacos: '', recursos: '', acessibilidade: '', sala_psi: '', 
-                // Seção 6: Demandas
                 queixa_gestao: '', queixa_profs: '', encaminhamentos: '' 
             }
         };
 
-        // SEMANA 2: Organização, Clima
         const modeloSemana2 = { 
             type: 's2', 
             data: { 
-                // Seção 3: Organização
                 horarios: '', regras: '', comunicacao: '', conselhos: '', 
-                // Seção 5: Clima
                 rel_gp: '', rel_pa: '', rel_pp: '', rel_ef: '' 
             }
         };
 
-        // SEMANA 3: Pedagógico, Síntese
         const modeloSemana3 = { 
             type: 's3', 
             data: { 
-                // Seção 4: Pedagógico
                 ppp: '', indices: '', inclusao: '', 
-                // Síntese
                 sintese: '', plano: '' 
             }
         };
@@ -389,15 +376,7 @@
             const clone = (obj) => JSON.parse(JSON.stringify(obj));
             return {
                 security: { hash: null },
-                schools: [
-                    { 
-                        id: 1, name: "Escola Exemplo", desc: "Terça e Quinta", meetings: [],
-                        weeks: [ 
-                            { id: 1, name: "Semana 1 - Diagnóstico", content: clone(modeloSemana1), extra: [] },
-                            { id: 2, name: "Semana 2 - Clima", content: clone(modeloSemana2), extra: [] }
-                        ] 
-                    }
-                ],
+                schools: [ { id: 1, name: "Escola Exemplo", desc: "Terça e Quinta", meetings: [], weeks: [ { id: 1, name: "Semana 1 - Diagnóstico", content: clone(modeloSemana1), extra: [] } ] } ],
                 calendar: {}
             };
         }
@@ -406,22 +385,17 @@
         let currSchool = null;
         let currWeek = null;
         let currentAgendaOffset = 0; 
+        let currentAgendaKey = ""; // Guarda a chave da semana atual pra não perder referência
 
-        // --- Criptografia e Auth ---
-        async function sha256(str) {
-            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
-        }
+        async function sha256(str) { const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join(""); }
 
         async function checkPassword() {
             const input = document.getElementById('password-input').value;
             const saved = localStorage.getItem('psicoGestao_v9');
-            
             if(saved) {
                 const parsed = JSON.parse(saved);
-                if(!parsed.calendar && parsed.agenda) {
-                    const k = getWeekKey(0); parsed.calendar = {}; parsed.calendar[k] = parsed.agenda; delete parsed.agenda;
-                } else if (!parsed.calendar) { parsed.calendar = {}; }
+                if(!parsed.calendar && parsed.agenda) { const k = getWeekKey(0); parsed.calendar = {}; parsed.calendar[k] = parsed.agenda; delete parsed.agenda; }
+                else if (!parsed.calendar) { parsed.calendar = {}; }
                 
                 if(parsed.security && parsed.security.hash) {
                     if(await sha256(input) === parsed.security.hash) { appData = parsed; enterApp(); } else alert("Senha incorreta.");
@@ -437,34 +411,51 @@
         function enterApp() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-container').style.display = 'flex';
+            if(appData.lastViewedWeek) {
+                currentAgendaKey = appData.lastViewedWeek;
+            }
             renderDashboard();
         }
 
-        function save() { localStorage.setItem('psicoGestao_v9', JSON.stringify(appData)); }
+        // --- FUNÇÕES DE SALVAR ---
+        function save() { 
+            localStorage.setItem('psicoGestao_v9', JSON.stringify(appData)); 
+        }
 
-        // --- Navegação ---
+        function saveManual() {
+            save();
+            showToast();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast-notification');
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
+        }
+
         function switchMainView(view) {
             const dash = document.getElementById('dashboard-view');
             const agenda = document.getElementById('agenda-view');
             const btnS = document.getElementById('btn-view-schools');
             const btnA = document.getElementById('btn-view-agenda');
+            const headerSchool = document.getElementById('header-school');
+            const headerDash = document.getElementById('header-dashboard');
 
             if(view === 'schools') {
                 dash.style.display = 'block'; agenda.style.display = 'none';
                 btnS.classList.add('active'); btnA.classList.remove('active');
+                if(!currSchool) { headerDash.style.display = 'flex'; headerSchool.style.display = 'none'; }
                 renderDashboard();
             } else {
                 dash.style.display = 'none'; agenda.style.display = 'block';
                 btnS.classList.remove('active'); btnA.classList.add('active');
-                currentAgendaOffset = 0; renderAgenda();
+                headerDash.style.display = 'flex'; headerSchool.style.display = 'none';
+                if(!currentAgendaKey) currentAgendaKey = getWeekKey(0);
+                renderAgenda();
             }
         }
 
-        // --- DASHBOARD ---
         function renderDashboard() {
-            document.getElementById('school-view').style.display = 'none';
-            document.getElementById('header-dashboard').style.display = 'flex';
-            document.getElementById('header-school').style.display = 'none';
             const grid = document.getElementById('school-grid'); grid.innerHTML = '';
             appData.schools.forEach((s, idx) => {
                 const div = document.createElement('div'); div.className = 'school-card'; div.onclick = () => openSchool(idx);
@@ -483,79 +474,73 @@
             }
         }
         function deleteSchool() { if(confirm("Apagar escola?")) { appData.schools.splice(currSchool, 1); save(); showDashboard(); } }
-        function showDashboard() { currSchool = null; switchMainView('schools'); }
+        function showDashboard() { currSchool = null; document.getElementById('school-view').style.display='none'; switchMainView('schools'); }
 
-        // --- AGENDA & PONTO ---
+        // --- SISTEMA DE DATAS ROBUSTO ---
         function getWeekKey(offset) {
-            const d = new Date(); const day = d.getDay(); const diff = d.getDate() - day + (day == 0 ? -6 : 1);
-            const monday = new Date(d.setDate(diff)); monday.setDate(monday.getDate() + (offset * 7));
+            const d = new Date(); 
+            const day = d.getDay(); 
+            const diff = d.getDate() - day + (day == 0 ? -6 : 1);
+            const monday = new Date(d.setDate(diff)); 
+            monday.setDate(monday.getDate() + (offset * 7));
             return monday.toISOString().split('T')[0];
         }
-        function getWeekLabel(offset) {
-            const d = new Date(); const day = d.getDay(); const diff = d.getDate() - day + (day == 0 ? -6 : 1);
-            const monday = new Date(d.setDate(diff)); monday.setDate(monday.getDate() + (offset * 7));
+        
+        function formatWeekKeyToLabel(key) {
+            if(!key) return "Semana";
+            const parts = key.split('-');
+            const monday = new Date(parts[0], parts[1]-1, parts[2]);
             const friday = new Date(monday); friday.setDate(friday.getDate() + 4);
             const fmt = (date) => `${String(date.getDate()).padStart(2,'0')}/${String(date.getMonth()+1).padStart(2,'0')}`;
             return `${fmt(monday)} a ${fmt(friday)}`;
         }
 
+        function updateWeekSelector() {
+            const selector = document.getElementById('week-history-selector');
+            selector.innerHTML = '';
+            const keys = Object.keys(appData.calendar).sort().reverse();
+            let allKeys = [...new Set([currentAgendaKey, ...keys])].sort().reverse();
+
+            allKeys.forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.text = formatWeekKeyToLabel(key) + (appData.calendar[key] ? " (Salvo)" : " (Novo)");
+                if(key === currentAgendaKey) option.selected = true;
+                selector.appendChild(option);
+            });
+        }
+
+        function jumpToWeek(key) {
+            currentAgendaKey = key;
+            const todayKey = getWeekKey(0);
+            if(key === todayKey) currentAgendaOffset = 0; 
+            renderAgenda();
+        }
+
         function renderAgenda() {
-            const weekKey = getWeekKey(currentAgendaOffset);
-            if(!appData.calendar[weekKey]) appData.calendar[weekKey] = daysOfWeek.map(d => baseDay(d));
-            const currentData = appData.calendar[weekKey];
+            if(!currentAgendaKey) currentAgendaKey = getWeekKey(0);
+            if(!appData.calendar[currentAgendaKey]) {
+                 appData.calendar[currentAgendaKey] = daysOfWeek.map(d => baseDay(d));
+            }
+            
+            const currentData = appData.calendar[currentAgendaKey];
             const tbody = document.getElementById('agenda-body'); tbody.innerHTML = '';
             let totalMins = 0;
-
-            document.getElementById('agenda-current-week-display').innerText = getWeekLabel(currentAgendaOffset);
+            
+            document.getElementById('agenda-current-week-display').innerText = formatWeekKeyToLabel(currentAgendaKey);
+            updateWeekSelector();
 
             currentData.forEach((day, idx) => {
-                let mins = 0;
-                let inputsHTML = '';
-                const rowClass = day.isHoliday ? 'ts-row holiday' : 'ts-row';
-
+                let mins = 0; let inputsHTML = ''; const rowClass = day.isHoliday ? 'ts-row holiday' : 'ts-row';
                 if(day.isHoliday) {
-                    if(day.credit) {
-                        const [h, m] = day.credit.split(':').map(Number);
-                        mins = (h*60) + m;
-                    }
-                    inputsHTML = `
-                        <td colspan="3" class="merged-cell" style="text-align:center; padding: 10px;">
-                            <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
-                                <span style="font-weight:700; color:var(--primary); font-size:0.9rem;">ABONO:</span>
-                                <input type="time" class="ts-input" value="${day.credit}" onchange="upAg('${weekKey}',${idx},'credit',this.value)" style="max-width:120px; background:white;">
-                            </div>
-                        </td>
-                    `;
+                    if(day.credit) { const [h, m] = day.credit.split(':').map(Number); mins = (h*60) + m; }
+                    inputsHTML = `<td colspan="3" class="merged-cell" style="text-align:center; padding: 10px;"><div style="display:flex; justify-content:center; align-items:center; gap:10px;"><span style="font-weight:700; color:var(--primary); font-size:0.9rem;">ABONO:</span><input type="time" class="ts-input" value="${day.credit}" onchange="upAg('${currentAgendaKey}',${idx},'credit',this.value)" style="max-width:120px; background:white;"></div></td>`;
                 } else {
-                    if(day.in && day.out) {
-                        const [h1, m1] = day.in.split(':').map(Number);
-                        const [h2, m2] = day.out.split(':').map(Number);
-                        let diff = (h2*60 + m2) - (h1*60 + m1);
-                        if(day.pause) diff -= parseInt(day.pause);
-                        if(diff > 0) mins = diff;
-                    }
-                    inputsHTML = `
-                        <td style="text-align:center"><input type="time" class="ts-input" value="${day.in}" onchange="upAg('${weekKey}',${idx},'in',this.value)"></td>
-                        <td style="text-align:center"><input type="time" class="ts-input" value="${day.out}" onchange="upAg('${weekKey}',${idx},'out',this.value)"></td>
-                        <td style="text-align:center"><input type="number" class="ts-input" placeholder="0" value="${day.pause}" onchange="upAg('${weekKey}',${idx},'pause',this.value)" style="width:70px"></td>
-                    `;
+                    if(day.in && day.out) { const [h1, m1] = day.in.split(':').map(Number); const [h2, m2] = day.out.split(':').map(Number); let diff = (h2*60 + m2) - (h1*60 + m1); if(day.pause) diff -= parseInt(day.pause); if(diff > 0) mins = diff; }
+                    inputsHTML = `<td style="text-align:center"><input type="time" class="ts-input" value="${day.in}" onchange="upAg('${currentAgendaKey}',${idx},'in',this.value)"></td><td style="text-align:center"><input type="time" class="ts-input" value="${day.out}" onchange="upAg('${currentAgendaKey}',${idx},'out',this.value)"></td><td style="text-align:center"><input type="number" class="ts-input" placeholder="0" value="${day.pause}" onchange="upAg('${currentAgendaKey}',${idx},'pause',this.value)" style="width:70px"></td>`;
                 }
-                
-                totalMins += mins;
-                const h = Math.floor(mins/60); const m = mins%60; const txt = `${h}h ${m.toString().padStart(2,'0')}m`;
-
-                tbody.innerHTML += `
-                <tr class="${rowClass}">
-                    <td>
-                        <div style="display:flex; align-items:center; justify-content:space-between;">
-                            ${day.day}
-                            <button class="btn-holiday ${day.isHoliday?'active':''}" onclick="toggleHoliday('${weekKey}',${idx})"><i class="fas fa-umbrella-beach"></i></button>
-                        </div>
-                    </td>
-                    <td><input type="text" class="ts-input ts-input-local" placeholder="Local" value="${day.local}" onchange="upAg('${weekKey}',${idx},'local',this.value)"></td>
-                    ${inputsHTML}
-                    <td style="font-weight:700; color:var(--primary); text-align:right;">${txt}</td>
-                </tr>`;
+                totalMins += mins; const h = Math.floor(mins/60); const m = mins%60; const txt = `${h}h ${m.toString().padStart(2,'0')}m`;
+                tbody.innerHTML += `<tr class="${rowClass}"><td><div style="display:flex; align-items:center; justify-content:space-between;">${day.day}<button class="btn-holiday ${day.isHoliday?'active':''}" onclick="toggleHoliday('${currentAgendaKey}',${idx})"><i class="fas fa-umbrella-beach"></i></button></div></td><td><input type="text" class="ts-input ts-input-local" placeholder="Local" value="${day.local}" onchange="upAg('${currentAgendaKey}',${idx},'local',this.value)"></td>${inputsHTML}<td style="font-weight:700; color:var(--primary); text-align:right;">${txt}</td></tr>`;
             });
 
             const target = 30 * 60; const left = target - totalMins;
@@ -564,34 +549,43 @@
             document.getElementById('metric-left').innerText = left > 0 ? fmt(left) : '0h 0m';
             const bal = document.getElementById('metric-balance');
             if(left > 0) { bal.innerText = "-" + fmt(left); bal.style.color = "#ef4444"; } else { bal.innerText = "+" + fmt(left); bal.style.color = "#0d9488"; }
+            
+            appData.lastViewedWeek = currentAgendaKey;
+            save();
         }
 
-        function toggleHoliday(key, idx) {
-            appData.calendar[key][idx].isHoliday = !appData.calendar[key][idx].isHoliday;
-            if(appData.calendar[key][idx].isHoliday) { appData.calendar[key][idx].in = ''; appData.calendar[key][idx].out = ''; appData.calendar[key][idx].pause = 0; }
-            save(); renderAgenda();
+        function toggleHoliday(key, idx) { appData.calendar[key][idx].isHoliday = !appData.calendar[key][idx].isHoliday; if(appData.calendar[key][idx].isHoliday) { appData.calendar[key][idx].in = ''; appData.calendar[key][idx].out = ''; appData.calendar[key][idx].pause = 0; } save(); renderAgenda(); }
+        
+        function changeWeek(dir) { 
+            if(!currentAgendaKey) currentAgendaKey = getWeekKey(0);
+            const parts = currentAgendaKey.split('-');
+            const currentMonday = new Date(parts[0], parts[1]-1, parts[2]);
+            currentMonday.setDate(currentMonday.getDate() + (dir * 7));
+            currentAgendaKey = currentMonday.toISOString().split('T')[0];
+            renderAgenda(); 
         }
-
-        function changeWeek(dir) { currentAgendaOffset += dir; renderAgenda(); }
+        
         function upAg(key, idx, field, val) { appData.calendar[key][idx][field] = val; save(); renderAgenda(); }
+        
+        function copyPreviousWeek() { 
+            if(!currentAgendaKey) return;
+            const parts = currentAgendaKey.split('-');
+            const currDate = new Date(parts[0], parts[1]-1, parts[2]);
+            const prevDate = new Date(currDate); prevDate.setDate(prevDate.getDate() - 7);
+            const prevKey = prevDate.toISOString().split('T')[0];
 
-        function copyPreviousWeek() {
-            const currentKey = getWeekKey(currentAgendaOffset);
-            const prevKey = getWeekKey(currentAgendaOffset - 1);
-            if(!appData.calendar[prevKey]) return alert("Sem dados anteriores.");
-            if(confirm("Copiar semana anterior?")) {
-                const prevData = JSON.parse(JSON.stringify(appData.calendar[prevKey]));
-                const cleanData = prevData.map(d => ({...d, isHoliday: false, credit: ''}));
-                appData.calendar[currentKey] = cleanData;
-                save(); renderAgenda();
-            }
+            if(!appData.calendar[prevKey]) return alert("Não encontrei dados na semana imediatamente anterior."); 
+            if(confirm("Copiar semana anterior?")) { 
+                appData.calendar[currentAgendaKey] = JSON.parse(JSON.stringify(appData.calendar[prevKey])).map(d => ({...d, isHoliday: false, credit: ''})); 
+                saveManual(); renderAgenda(); 
+            } 
         }
 
-        // --- ESCOLA VIEW ---
         function openSchool(idx) {
             currSchool = idx; currWeek = 0;
             document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('agenda-view').style.display = 'none';
-            document.getElementById('school-view').style.display = 'flex'; document.getElementById('header-dashboard').style.display = 'none';
+            document.getElementById('school-view').style.display = 'flex'; 
+            document.getElementById('header-dashboard').style.display = 'none';
             document.getElementById('header-school').style.display = 'flex';
             document.getElementById('current-school-name').innerText = appData.schools[idx].name; renderWeeks();
         }
@@ -605,23 +599,18 @@
             }); renderForm();
         }
 
-        function addWeek() {
-            const num = appData.schools[currSchool].weeks.length + 1; const newTopics = JSON.parse(JSON.stringify(genericTemplate));
-            appData.schools[currSchool].weeks.push({ id: Date.now(), name: `Semana ${num}`, content: { type: 'generic', data: {} }, extra: newTopics });
-            currWeek = appData.schools[currSchool].weeks.length - 1; save(); renderWeeks();
-        }
+        function addWeek() { const num = appData.schools[currSchool].weeks.length + 1; const newTopics = JSON.parse(JSON.stringify(genericTemplate)); appData.schools[currSchool].weeks.push({ id: Date.now(), name: `Semana ${num}`, content: { type: 'generic', data: {} }, extra: newTopics }); currWeek = appData.schools[currSchool].weeks.length - 1; save(); renderWeeks(); }
         function updateWeekName(val) { appData.schools[currSchool].weeks[currWeek].name = val; save(); renderWeeks(); }
 
         function renderForm() {
             const week = appData.schools[currSchool].weeks[currWeek]; document.getElementById('week-title-edit').value = week.name;
-            const container = document.getElementById('form-container-inner'); container.innerHTML = '';
-            if(week.content.type === 's1') formS1(week.content.data, container); else if(week.content.type === 's2') formS2(week.content.data, container); else if(week.content.type === 's3') formS3(week.content.data, container);
-            if(!week.extra) week.extra = []; week.extra.forEach((t, idx) => formGeneric(t, idx, container));
+            const c = document.getElementById('form-container-inner'); c.innerHTML = '';
+            if(week.content.type === 's1') formS1(week.content.data, c); else if(week.content.type === 's2') formS2(week.content.data, c); else if(week.content.type === 's3') formS3(week.content.data, c);
+            if(!week.extra) week.extra = []; week.extra.forEach((t, idx) => formGeneric(t, idx, c));
         }
 
-        // --- FORMULÁRIOS COMPLETOS RESTAURADOS ---
+        // --- FORMULÁRIOS COMPLETOS E RESTAURADOS (VISUAL ANTERIOR) ---
 
-        // SEMANA 1: Itens 1, 2 e 6
         function formS1(d, c) {
             c.innerHTML += `
             <div class="section-card">
@@ -671,7 +660,6 @@
             </div>`;
         }
 
-        // SEMANA 2: Itens 3 e 5
         function formS2(d, c) {
             c.innerHTML += `
             <div class="section-card">
@@ -693,7 +681,6 @@
             </div>`;
         }
 
-        // SEMANA 3: Item 4 e Síntese
         function formS3(d, c) {
             c.innerHTML += `
             <div class="section-card">
@@ -710,6 +697,7 @@
         }
 
         function formGeneric(t, idx, c) { c.innerHTML += `<div class="section-card generic-topic" style="padding:0;"><div class="generic-header" style="background:#f1f5f9; padding:15px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between;"><input type="text" class="generic-title-input" style="font-size:1rem; padding:0; background:transparent; border:none; color:var(--primary-dark); font-weight:700;" value="${t.title}" onchange="upXT(${idx},this.value)"><button class="btn-danger" style="background:transparent; border:none; color:#ef4444;" onclick="delX(${idx})"><i class="fas fa-trash-alt"></i></button></div><div class="generic-body" style="padding:20px;"><textarea rows="4" oninput="upXC(${idx},this.value)" placeholder="Escreva aqui..." style="border:none; background:transparent; width:100%; outline:none;">${t.content}</textarea></div></div>`; }
+        
         function upD(k, v) { appData.schools[currSchool].weeks[currWeek].content.data[k] = v; save(); }
         function upC(ok, k, v) { appData.schools[currSchool].weeks[currWeek].content.data[ok][k] = v; save(); }
         function upXT(i, v) { appData.schools[currSchool].weeks[currWeek].extra[i].title = v; save(); }
@@ -719,7 +707,7 @@
 
         function openMeetings() { document.getElementById('modal-overlay').style.display = 'flex'; renderMeetings(); }
         function closeMeetings() { document.getElementById('modal-overlay').style.display = 'none'; }
-        function renderMeetings() { const list = document.getElementById('meetings-list'); list.innerHTML = ''; const meetings = appData.schools[currSchool].meetings || []; if(meetings.length===0) list.innerHTML='<div style="text-align:center;color:var(--text-muted); margin-top:20px;">Sem reuniões registradas.</div>'; meetings.forEach((m, i) => { list.innerHTML += `<div class="meeting-item"><div style="display:flex; justify-content:space-between; margin-bottom:10px;"><input type="date" value="${m.date}" onchange="upMeet(${i},'date',this.value)" style="border:none; font-weight:700; color:var(--primary); font-family:Inter, sans-serif;"><button class="btn-danger" style="padding:4px 8px;" onclick="delMeet(${i})"><i class="fas fa-trash"></i></button></div><textarea rows="3" placeholder="Pauta..." oninput="upMeet(${i},'text',this.value)" style="width:100%;">${m.text}</textarea></div>`; }); }
+        function renderMeetings() { const list = document.getElementById('meetings-list'); list.innerHTML = ''; const meetings = appData.schools[currSchool].meetings || []; if(meetings.length===0) list.innerHTML='<div style="text-align:center;color:var(--text-muted); margin-top:20px;">Sem reuniões.</div>'; meetings.forEach((m, i) => { list.innerHTML += `<div class="meeting-item"><div style="display:flex; justify-content:space-between; margin-bottom:10px;"><input type="date" value="${m.date}" onchange="upMeet(${i},'date',this.value)" style="border:none; font-weight:700; color:var(--primary); font-family:Inter, sans-serif;"><button class="btn-danger" style="padding:4px 8px;" onclick="delMeet(${i})"><i class="fas fa-trash"></i></button></div><textarea rows="3" placeholder="Pauta..." oninput="upMeet(${i},'text',this.value)" style="width:100%;">${m.text}</textarea></div>`; }); }
         function addMeeting() { if(!appData.schools[currSchool].meetings) appData.schools[currSchool].meetings=[]; appData.schools[currSchool].meetings.unshift({date:new Date().toISOString().slice(0,10),part:'',text:''}); save(); renderMeetings(); }
         function upMeet(i,k,v) { appData.schools[currSchool].meetings[i][k]=v; save(); }
         function delMeet(i) { if(confirm("Apagar?")) { appData.schools[currSchool].meetings.splice(i,1); save(); renderMeetings(); }}
