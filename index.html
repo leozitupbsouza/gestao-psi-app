@@ -28,6 +28,8 @@
             --status-green: #22c55e;
             --status-orange: #f59e0b;
             --status-red: #ef4444;
+            --tag-blue: #3b82f6;
+            --tag-purple: #8b5cf6;
         }
 
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -89,8 +91,12 @@
         .week-tab { padding: 8px 20px; background: transparent; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); border: 1px solid transparent; white-space: nowrap; transition: 0.2s; flex-shrink: 0; }
         .week-tab:hover { background: #f8fafc; color: var(--text-main); }
         .week-tab.active { background: var(--primary-soft); color: var(--primary-dark); font-weight: 700; border-color: var(--primary-soft); }
-        .week-tab.tab-special { border: 1px dashed var(--border-color); margin-left: 10px; }
-        .week-tab.tab-special.active { border-style: solid; }
+        
+        .week-tab.tab-special { border: 1px dashed var(--border-color); margin-left: 5px; }
+        .week-tab.tab-special.active { border-style: solid; background: #fff7ed; color: #c2410c; border-color: #ffedd5; }
+        
+        .week-tab.tab-special-2 { border: 1px dashed var(--border-color); margin-left: 5px; }
+        .week-tab.tab-special-2.active { border-style: solid; background: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
 
         .content-scroll { flex: 1; padding: 40px 20px; display: flex; justify-content: center; }
         .form-container { width: 100%; max-width: 900px; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
@@ -107,12 +113,11 @@
         label { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 10px; }
         
         /* Estilização Unificada de Inputs */
-        input[type="text"], textarea, input[type="number"], input[type="time"], select { 
+        input[type="text"], textarea, input[type="number"], input[type="time"], input[type="date"], select { 
             width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; 
             background: #f8fafc; font-size: 1rem; color: var(--text-main); font-family: 'Inter', sans-serif; 
             transition: 0.2s; -webkit-appearance: none; box-sizing: border-box;
         }
-        /* Correção para select ter seta */
         select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; padding-right: 2.5rem; }
 
         input:focus, textarea:focus, select:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); outline: none; }
@@ -137,7 +142,7 @@
         .btn-save { background: #1e293b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: var(--shadow-sm); }
         .btn-save:active { transform: scale(0.95); }
 
-        /* --- ESTILOS ESPECÍFICOS: LEVANTAMENTO DE ALUNOS --- */
+        /* --- ESTILOS ESPECÍFICOS --- */
         .student-table-container { overflow-x: auto; margin-top: 20px; border: 1px solid var(--border-color); border-radius: 10px; }
         .student-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 800px; }
         .student-table th { background-color: #f1f5f9; color: var(--text-main); font-weight: 600; padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
@@ -148,6 +153,11 @@
         .status-laudado { background-color: var(--status-green); }
         .status-investigacao { background-color: var(--status-orange); }
         .status-suspeita { background-color: var(--status-red); }
+        
+        .type-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #1e293b; display: inline-block; background: #e2e8f0; }
+        .type-aluno { background: #dbeafe; color: #1e40af; }
+        .type-pais { background: #fae8ff; color: #86198f; }
+        .type-equipe { background: #ffedd5; color: #9a3412; }
 
         .action-bar { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
 
@@ -253,7 +263,7 @@
                 <div class="container-center">
                     <div class="section-header">
                         <h2>Minhas Escolas</h2>
-                        <p style="color:var(--text-muted)">Gerencie seus diários de campo</p>
+                        <p style="color:var(--text-muted)">Gerencie seus diários e registros</p>
                     </div>
                     
                     <div class="school-grid" id="school-grid"></div>
@@ -417,8 +427,13 @@
                     name: "Escola Exemplo", 
                     desc: "Terça e Quinta", 
                     meetings: [], 
-                    students: [], // NOVO ARRAY DE ALUNOS
-                    weeks: [ { id: 1, name: "Semana 1 - Diagnóstico", content: clone(modeloSemana1), extra: [] } ] 
+                    students: [], 
+                    attendances: [],
+                    weeks: [ 
+                        { id: 1, name: "S1 - Identificação", content: clone(modeloSemana1), extra: [] },
+                        { id: 2, name: "S2 - Clima", content: clone(modeloSemana2), extra: [] },
+                        { id: 3, name: "S3 - Pedagógico", content: clone(modeloSemana3), extra: [] }
+                    ] 
                 } ],
                 calendar: {}
             };
@@ -426,7 +441,7 @@
 
         let appData = getInitialData();
         let currSchool = null;
-        let currWeek = null; // 'students' se estiver na aba de alunos
+        let currWeek = null; // 'students' ou 'attendance' se estiver nas abas especiais
         let currentAgendaOffset = 0; 
         let currentAgendaKey = "";
 
@@ -434,14 +449,17 @@
 
         async function checkPassword() {
             const input = document.getElementById('password-input').value;
-            const saved = localStorage.getItem('psicoGestao_v9');
+            const saved = localStorage.getItem('psicoGestao_v10'); // Versão atualizada storage key
             if(saved) {
                 const parsed = JSON.parse(saved);
                 if(!parsed.calendar && parsed.agenda) { const k = getWeekKey(0); parsed.calendar = {}; parsed.calendar[k] = parsed.agenda; delete parsed.agenda; }
                 else if (!parsed.calendar) { parsed.calendar = {}; }
                 
-                // Migração para garantir array de alunos
-                parsed.schools.forEach(s => { if(!s.students) s.students = []; });
+                // Migração
+                parsed.schools.forEach(s => { 
+                    if(!s.students) s.students = []; 
+                    if(!s.attendances) s.attendances = []; // Inicializa novo array
+                });
 
                 if(parsed.security && parsed.security.hash) {
                     if(await sha256(input) === parsed.security.hash) { appData = parsed; enterApp(); } else alert("Senha incorreta.");
@@ -464,7 +482,7 @@
         }
 
         function save() { 
-            localStorage.setItem('psicoGestao_v9', JSON.stringify(appData)); 
+            localStorage.setItem('psicoGestao_v10', JSON.stringify(appData)); 
         }
 
         function saveManual() {
@@ -515,7 +533,7 @@
                 const desc = prompt("Descrição (Ex: Segunda e Terça):");
                 const clone = (obj) => JSON.parse(JSON.stringify(obj));
                 const newSchool = { 
-                    id: Date.now(), name, desc, meetings: [], students: [],
+                    id: Date.now(), name, desc, meetings: [], students: [], attendances: [],
                     weeks: [ { id: Date.now()+1, name: "S1 - Identificação", content: clone(modeloSemana1), extra: [] }, { id: Date.now()+2, name: "S2 - Clima", content: clone(modeloSemana2), extra: [] }, { id: Date.now()+3, name: "S3 - Pedagógico", content: clone(modeloSemana3), extra: [] } ] 
                 };
                 appData.schools.push(newSchool); save(); renderDashboard();
@@ -624,7 +642,7 @@
             renderAgenda(); 
         }
 
-        // --- LÓGICA DE ESCOLAS & ALUNOS ---
+        // --- LÓGICA DE ESCOLAS & ABAS ---
 
         function openSchool(idx) {
             currSchool = idx; currWeek = 0;
@@ -638,7 +656,7 @@
         function renderWeeks() {
             const container = document.getElementById('week-tabs'); container.innerHTML = '';
             
-            // Abas de Semanas
+            // Abas de Semanas (Diários)
             appData.schools[currSchool].weeks.forEach((w, idx) => {
                 const btn = document.createElement('button'); 
                 let shortName = w.name; if(w.name.includes("-")) shortName = w.name.split("-")[0];
@@ -648,21 +666,174 @@
                 container.appendChild(btn);
             });
             
-            // Aba de Alunos (Separador)
+            // Aba de Alunos (Mapeamento)
             const btnAlunos = document.createElement('button');
             btnAlunos.className = `week-tab tab-special ${currWeek === 'students' ? 'active' : ''}`;
-            btnAlunos.innerHTML = '<i class="fas fa-users"></i> Alunos';
+            btnAlunos.innerHTML = '<i class="fas fa-list-ul"></i> Mapeamento';
             btnAlunos.onclick = () => { currWeek = 'students'; renderWeeks(); };
             container.appendChild(btnAlunos);
 
+            // NOVA ABA: Escuta & Demandas
+            const btnEscuta = document.createElement('button');
+            btnEscuta.className = `week-tab tab-special-2 ${currWeek === 'attendance' ? 'active' : ''}`;
+            btnEscuta.innerHTML = '<i class="fas fa-comments"></i> Escuta/Demandas';
+            btnEscuta.onclick = () => { currWeek = 'attendance'; renderWeeks(); };
+            container.appendChild(btnEscuta);
+
             if(currWeek === 'students') renderStudentsView();
+            else if (currWeek === 'attendance') renderAttendanceView();
             else renderForm();
         }
 
         function addWeek() { const num = appData.schools[currSchool].weeks.length + 1; const newTopics = JSON.parse(JSON.stringify(genericTemplate)); appData.schools[currSchool].weeks.push({ id: Date.now(), name: `Semana ${num}`, content: { type: 'generic', data: {} }, extra: newTopics }); currWeek = appData.schools[currSchool].weeks.length - 1; save(); renderWeeks(); }
         function updateWeekName(val) { appData.schools[currSchool].weeks[currWeek].name = val; save(); renderWeeks(); }
 
-        // --- RENDERIZAÇÃO DO LEVANTAMENTO DE ALUNOS ---
+        // --- ABA DE ESCUTA/DEMANDAS (NOVA FUNCIONALIDADE) ---
+
+        function renderAttendanceView() {
+            document.getElementById('week-title-edit').style.display = 'none';
+            document.getElementById('generic-buttons-container').style.display = 'none';
+
+            const container = document.getElementById('form-container-inner');
+            container.innerHTML = `
+                <div class="section-card" style="border-left: 5px solid #3b82f6;">
+                    <div class="section-title" style="color:#1e40af">Registro de Atendimento e Escuta Institucional</div>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
+                        Espaço destinado ao registro de queixas pontuais, atendimentos breves a pais, grupos ou equipe escolar.
+                    </p>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Data do Atendimento</label>
+                            <input type="date" id="att_date" value="${new Date().toISOString().slice(0,10)}">
+                        </div>
+                        <div class="form-group">
+                            <label>Público Alvo / Quem?</label>
+                            <select id="att_type">
+                                <option value="Aluno (Individual)">Aluno (Individual)</option>
+                                <option value="Grupo de Alunos">Grupo de Alunos</option>
+                                <option value="Família/Pais">Família / Pais / Responsáveis</option>
+                                <option value="Equipe/Funcionário">Professor / Equipe / Funcionário</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nome(s) dos Envolvidos</label>
+                        <input type="text" id="att_names" placeholder="Ex: João Silva (5º B) e Maria Souza">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Demanda / Queixa Principal</label>
+                        <textarea id="att_demand" rows="3" placeholder="Qual o motivo da escuta? (Ex: Conflito em sala, dúvida sobre comportamento, solicitação da coordenação...)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Orientação / Manejo / Encaminhamento</label>
+                        <textarea id="att_action" rows="3" placeholder="O que foi feito? (Ex: Escuta acolhedora, orientação aos pais, encaminhamento ao CRAS, mediação de conflito...)"></textarea>
+                    </div>
+
+                    <div style="text-align:right;">
+                        <button class="btn" style="background:#1e40af;" onclick="addAttendance()">Salvar Registro</button>
+                    </div>
+                </div>
+
+                <div id="attendance-list-area">
+                    <h3 style="color:var(--text-main); margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+                        <i class="fas fa-history" style="color:#cbd5e1"></i> Histórico de Escutas
+                    </h3>
+                    <div class="student-table-container">
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:100px;">Data</th>
+                                    <th style="width:140px;">Público</th>
+                                    <th>Nome / Demanda</th>
+                                    <th>Ações / Manejo</th>
+                                    <th style="width:50px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            renderAttendanceTable();
+        }
+
+        function addAttendance() {
+            const date = document.getElementById('att_date').value;
+            const type = document.getElementById('att_type').value;
+            const names = document.getElementById('att_names').value;
+            const demand = document.getElementById('att_demand').value;
+            const action = document.getElementById('att_action').value;
+
+            if(!names || !demand) return alert("Preencha ao menos o nome e a demanda.");
+
+            const newAtt = {
+                id: Date.now(),
+                date, type, names, demand, action
+            };
+
+            if(!appData.schools[currSchool].attendances) appData.schools[currSchool].attendances = [];
+            appData.schools[currSchool].attendances.unshift(newAtt); // Adiciona no topo
+            save();
+
+            // Limpa campos
+            document.getElementById('att_names').value = '';
+            document.getElementById('att_demand').value = '';
+            document.getElementById('att_action').value = '';
+            showToast();
+            renderAttendanceTable();
+        }
+
+        function renderAttendanceTable() {
+            const tbody = document.getElementById('attendance-table-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            const list = appData.schools[currSchool].attendances || [];
+
+            if(list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum registro de escuta ainda.</td></tr>';
+                return;
+            }
+
+            list.forEach((item, idx) => {
+                let badgeClass = 'type-badge';
+                if(item.type.includes('Aluno')) badgeClass += ' type-aluno';
+                else if(item.type.includes('Pais') || item.type.includes('Família')) badgeClass += ' type-pais';
+                else if(item.type.includes('Equipe')) badgeClass += ' type-equipe';
+
+                const dateParts = item.date.split('-');
+                const dateFmt = `${dateParts[2]}/${dateParts[1]}`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-weight:600; color:var(--text-muted);">${dateFmt}</td>
+                        <td><span class="${badgeClass}">${item.type}</span></td>
+                        <td>
+                            <strong>${item.names}</strong><br>
+                            <span style="font-size:0.85rem; color:#475569;">${item.demand}</span>
+                        </td>
+                        <td style="font-size:0.85rem; color:#475569;">${item.action || '-'}</td>
+                        <td>
+                            <button class="btn-ghost" style="color:#ef4444;" onclick="removeAttendance(${idx})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function removeAttendance(idx) {
+            if(confirm("Remover este registro?")) {
+                appData.schools[currSchool].attendances.splice(idx, 1);
+                save();
+                renderAttendanceTable();
+            }
+        }
+
+
+        // --- RENDERIZAÇÃO DO LEVANTAMENTO DE ALUNOS (Mantido) ---
 
         function renderStudentsView() {
             document.getElementById('week-title-edit').style.display = 'none';
@@ -671,7 +842,7 @@
             const container = document.getElementById('form-container-inner');
             container.innerHTML = `
                 <div class="section-card" id="student-form-section">
-                    <div class="section-title">Ficha de Mapeamento - Necessidades Específicas</div>
+                    <div class="section-title">Mapeamento e Triagem de Alunos (NEE)</div>
                     
                     <div class="row" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
                         <div style="flex:2; min-width:200px;">
@@ -779,7 +950,6 @@
             appData.schools[currSchool].students.push(newStudent);
             save();
             
-            // Limpa campos principais, mantém contexto
             document.getElementById('std_nome').value = '';
             document.getElementById('std_hipotese').value = '';
             document.getElementById('std_obs').value = '';
@@ -876,7 +1046,7 @@
         }
 
 
-        // --- FORMULÁRIOS DAS SEMANAS ---
+        // --- FORMULÁRIOS DAS SEMANAS (Mantido) ---
 
         function renderForm() {
             document.getElementById('week-title-edit').style.display = 'block';
