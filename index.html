@@ -6,8 +6,10 @@
     <title>Gestão Psicologia Escolar</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
-        /* --- ESTILOS GERAIS --- */
+        /* --- ESTILOS GERAIS (Minimalismo & Design System) --- */
         :root {
             --primary: #0d9488;
             --primary-dark: #0f766e;
@@ -21,6 +23,11 @@
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
             --radius: 12px; 
             --container-width: 1000px;
+            
+            /* Status Colors para Alunos */
+            --status-green: #22c55e;
+            --status-orange: #f59e0b;
+            --status-red: #ef4444;
         }
 
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -36,11 +43,12 @@
             overflow: hidden; 
         }
 
+        /* Scrollbar Refinada */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
-        /* Login */
+        /* Login Screen */
         #login-screen { position: fixed; inset: 0; background: var(--bg-body); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .login-box { background: var(--bg-surface); padding: 3rem; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
         .login-input { width: 100%; padding: 18px; margin: 20px 0; border: 2px solid var(--border-color); border-radius: var(--radius); font-size: 16px; text-align: center; background: #f8fafc; }
@@ -61,29 +69,34 @@
         #header-school { display: none; width: 100%; justify-content: space-between; align-items: center; }
         #current-school-name { font-size: 1.2rem; font-weight: 700; margin: 0 15px; text-align: center; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Conteúdo */
+        /* Conteúdo Principal */
         #app-content { flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth; }
 
-        /* Dashboard */
+        /* Dashboard (Grid de Escolas) */
         #dashboard-view { padding: 40px 20px; }
         .container-center { max-width: 1200px; margin: 0 auto; }
         .section-header { text-align: center; margin-bottom: 40px; }
         .section-header h2 { font-size: 1.8rem; margin: 0 0 8px 0; }
         .school-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         .school-card { background: var(--bg-surface); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; box-shadow: var(--shadow-sm); }
-        
-        /* Visão Escola */
+        .school-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary-soft); }
+
+        /* Visão Escola (Abas e Formulários) */
         #school-view { display: none; flex-direction: column; height: 100%; }
         .week-bar-container { background: var(--bg-surface); border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; padding: 0 20px; flex-shrink: 0; position: sticky; top: 0; z-index: 15; }
         .week-bar { display: flex; gap: 10px; overflow-x: auto; max-width: var(--container-width); width: 100%; padding: 15px 0; scrollbar-width: none; align-items: center; }
-        .week-tab { padding: 8px 20px; background: transparent; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); border: 1px solid transparent; white-space: nowrap; transition: 0.2s; flex-shrink: 0; }
-        .week-tab.active { background: var(--primary-soft); color: var(--primary-dark); font-weight: 700; border-color: var(--primary-soft); }
         
+        .week-tab { padding: 8px 20px; background: transparent; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); border: 1px solid transparent; white-space: nowrap; transition: 0.2s; flex-shrink: 0; }
+        .week-tab:hover { background: #f8fafc; color: var(--text-main); }
+        .week-tab.active { background: var(--primary-soft); color: var(--primary-dark); font-weight: 700; border-color: var(--primary-soft); }
+        .week-tab.tab-special { border: 1px dashed var(--border-color); margin-left: 10px; }
+        .week-tab.tab-special.active { border-style: solid; }
+
         .content-scroll { flex: 1; padding: 40px 20px; display: flex; justify-content: center; }
         .form-container { width: 100%; max-width: 900px; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
 
-        /* Inputs & Seções (Visual Restaurado) */
+        /* Inputs & Componentes de Formulário */
         .week-title-editor { width: 100%; font-size: 1.8rem; font-weight: 700; border: none; background: transparent; text-align: center; margin-bottom: 40px; color: var(--text-main); font-family: 'Inter', sans-serif;}
         .section-card { background: var(--bg-surface); border-radius: var(--radius); padding: 35px; margin-bottom: 30px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
         
@@ -92,8 +105,18 @@
         
         .form-group { margin-bottom: 25px; }
         label { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 10px; }
-        input[type="text"], textarea, input[type="number"], input[type="time"] { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; background: #f8fafc; font-size: 1rem; color: var(--text-main); font-family: 'Inter', sans-serif; transition: 0.2s; -webkit-appearance: none; }
-        input:focus, textarea:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+        
+        /* Estilização Unificada de Inputs */
+        input[type="text"], textarea, input[type="number"], input[type="time"], select { 
+            width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; 
+            background: #f8fafc; font-size: 1rem; color: var(--text-main); font-family: 'Inter', sans-serif; 
+            transition: 0.2s; -webkit-appearance: none; box-sizing: border-box;
+        }
+        /* Correção para select ter seta */
+        select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; padding-right: 2.5rem; }
+
+        input:focus, textarea:focus, select:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); outline: none; }
+        
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         .checkbox-group { display: flex; gap: 20px; flex-wrap: wrap; background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); }
         .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; }
@@ -104,23 +127,36 @@
         .footer-content { width: 100%; max-width: 1200px; display: flex; justify-content: flex-end; gap: 15px; }
 
         /* Botões */
-        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; gap: 8px; }
-        .btn-outline { background: white; border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn:hover { background: var(--primary-dark); }
+        .btn-outline { background: white; border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
         .btn-ghost { background: transparent; border: none; cursor: pointer; color: var(--text-muted); padding: 8px 12px; font-size: 0.95rem; }
         .btn-danger { background: #fee2e2; color: #ef4444; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
         
-        /* Botão Salvar Especial */
         .btn-save { background: #1e293b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: var(--shadow-sm); }
         .btn-save:active { transform: scale(0.95); }
+
+        /* --- ESTILOS ESPECÍFICOS: LEVANTAMENTO DE ALUNOS --- */
+        .student-table-container { overflow-x: auto; margin-top: 20px; border: 1px solid var(--border-color); border-radius: 10px; }
+        .student-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 800px; }
+        .student-table th { background-color: #f1f5f9; color: var(--text-main); font-weight: 600; padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .student-table td { padding: 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .student-table tr:last-child td { border-bottom: none; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; color: white; display: inline-block; }
+        .status-laudado { background-color: var(--status-green); }
+        .status-investigacao { background-color: var(--status-orange); }
+        .status-suspeita { background-color: var(--status-red); }
+
+        .action-bar { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
 
         /* Agenda & Ponto */
         .toggle-view-btn { background: #f1f5f9; color: var(--text-muted); padding: 8px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; display:flex; gap:8px; align-items:center; }
         .toggle-view-btn.active { background: var(--text-main); color: white; }
         
         .agenda-controls { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        
         .agenda-nav { display: flex; justify-content: center; align-items: center; gap: 20px; background: white; padding: 10px; border-radius: 50px; border: 1px solid var(--border-color); width: 100%; box-shadow: var(--shadow-sm); }
-        
         .week-history-selector { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: white; font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-main); }
         
         .metrics-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
@@ -295,7 +331,7 @@
                     <div class="form-container">
                         <input type="text" id="week-title-edit" class="week-title-editor" onchange="updateWeekName(this.value)">
                         <div id="form-container-inner"></div>
-                        <div style="margin-top:60px; text-align:center; padding-top:30px; border-top:2px dashed var(--border-color);">
+                        <div id="generic-buttons-container" style="margin-top:60px; text-align:center; padding-top:30px; border-top:2px dashed var(--border-color);">
                             <button class="btn-outline" onclick="addGenericTopic()" style="border-style: dashed;">+ Tópico Livre</button>
                         </div>
                     </div>
@@ -338,7 +374,7 @@
             if(e.key === 'Enter') checkPassword();
         });
 
-        // MODELOS DE DADOS COMPLETOS (RESTAURADOS)
+        // MODELOS DE DADOS
         const modeloSemana1 = { 
             type: 's1', 
             data: { 
@@ -376,16 +412,23 @@
             const clone = (obj) => JSON.parse(JSON.stringify(obj));
             return {
                 security: { hash: null },
-                schools: [ { id: 1, name: "Escola Exemplo", desc: "Terça e Quinta", meetings: [], weeks: [ { id: 1, name: "Semana 1 - Diagnóstico", content: clone(modeloSemana1), extra: [] } ] } ],
+                schools: [ { 
+                    id: 1, 
+                    name: "Escola Exemplo", 
+                    desc: "Terça e Quinta", 
+                    meetings: [], 
+                    students: [], // NOVO ARRAY DE ALUNOS
+                    weeks: [ { id: 1, name: "Semana 1 - Diagnóstico", content: clone(modeloSemana1), extra: [] } ] 
+                } ],
                 calendar: {}
             };
         }
 
         let appData = getInitialData();
         let currSchool = null;
-        let currWeek = null;
+        let currWeek = null; // 'students' se estiver na aba de alunos
         let currentAgendaOffset = 0; 
-        let currentAgendaKey = ""; // Guarda a chave da semana atual pra não perder referência
+        let currentAgendaKey = "";
 
         async function sha256(str) { const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join(""); }
 
@@ -397,6 +440,9 @@
                 if(!parsed.calendar && parsed.agenda) { const k = getWeekKey(0); parsed.calendar = {}; parsed.calendar[k] = parsed.agenda; delete parsed.agenda; }
                 else if (!parsed.calendar) { parsed.calendar = {}; }
                 
+                // Migração para garantir array de alunos
+                parsed.schools.forEach(s => { if(!s.students) s.students = []; });
+
                 if(parsed.security && parsed.security.hash) {
                     if(await sha256(input) === parsed.security.hash) { appData = parsed; enterApp(); } else alert("Senha incorreta.");
                 } else setupPass(input);
@@ -417,7 +463,6 @@
             renderDashboard();
         }
 
-        // --- FUNÇÕES DE SALVAR ---
         function save() { 
             localStorage.setItem('psicoGestao_v9', JSON.stringify(appData)); 
         }
@@ -469,14 +514,17 @@
             if(name) {
                 const desc = prompt("Descrição (Ex: Segunda e Terça):");
                 const clone = (obj) => JSON.parse(JSON.stringify(obj));
-                const newSchool = { id: Date.now(), name, desc, meetings: [], weeks: [ { id: Date.now()+1, name: "S1 - Identificação", content: clone(modeloSemana1), extra: [] }, { id: Date.now()+2, name: "S2 - Clima", content: clone(modeloSemana2), extra: [] }, { id: Date.now()+3, name: "S3 - Pedagógico", content: clone(modeloSemana3), extra: [] } ] };
+                const newSchool = { 
+                    id: Date.now(), name, desc, meetings: [], students: [],
+                    weeks: [ { id: Date.now()+1, name: "S1 - Identificação", content: clone(modeloSemana1), extra: [] }, { id: Date.now()+2, name: "S2 - Clima", content: clone(modeloSemana2), extra: [] }, { id: Date.now()+3, name: "S3 - Pedagógico", content: clone(modeloSemana3), extra: [] } ] 
+                };
                 appData.schools.push(newSchool); save(); renderDashboard();
             }
         }
         function deleteSchool() { if(confirm("Apagar escola?")) { appData.schools.splice(currSchool, 1); save(); showDashboard(); } }
         function showDashboard() { currSchool = null; document.getElementById('school-view').style.display='none'; switchMainView('schools'); }
 
-        // --- SISTEMA DE DATAS ROBUSTO ---
+        // --- SISTEMA DE DATAS ---
         function getWeekKey(offset) {
             const d = new Date(); 
             const day = d.getDay(); 
@@ -555,16 +603,6 @@
         }
 
         function toggleHoliday(key, idx) { appData.calendar[key][idx].isHoliday = !appData.calendar[key][idx].isHoliday; if(appData.calendar[key][idx].isHoliday) { appData.calendar[key][idx].in = ''; appData.calendar[key][idx].out = ''; appData.calendar[key][idx].pause = 0; } save(); renderAgenda(); }
-        
-        function changeWeek(dir) { 
-            if(!currentAgendaKey) currentAgendaKey = getWeekKey(0);
-            const parts = currentAgendaKey.split('-');
-            const currentMonday = new Date(parts[0], parts[1]-1, parts[2]);
-            currentMonday.setDate(currentMonday.getDate() + (dir * 7));
-            currentAgendaKey = currentMonday.toISOString().split('T')[0];
-            renderAgenda(); 
-        }
-        
         function upAg(key, idx, field, val) { appData.calendar[key][idx][field] = val; save(); renderAgenda(); }
         
         function copyPreviousWeek() { 
@@ -573,13 +611,20 @@
             const currDate = new Date(parts[0], parts[1]-1, parts[2]);
             const prevDate = new Date(currDate); prevDate.setDate(prevDate.getDate() - 7);
             const prevKey = prevDate.toISOString().split('T')[0];
-
             if(!appData.calendar[prevKey]) return alert("Não encontrei dados na semana imediatamente anterior."); 
-            if(confirm("Copiar semana anterior?")) { 
-                appData.calendar[currentAgendaKey] = JSON.parse(JSON.stringify(appData.calendar[prevKey])).map(d => ({...d, isHoliday: false, credit: ''})); 
-                saveManual(); renderAgenda(); 
-            } 
+            if(confirm("Copiar semana anterior?")) { appData.calendar[currentAgendaKey] = JSON.parse(JSON.stringify(appData.calendar[prevKey])).map(d => ({...d, isHoliday: false, credit: ''})); saveManual(); renderAgenda(); } 
         }
+
+        function changeWeek(dir) { 
+            if(!currentAgendaKey) currentAgendaKey = getWeekKey(0);
+            const parts = currentAgendaKey.split('-');
+            const currentMonday = new Date(parts[0], parts[1]-1, parts[2]);
+            currentMonday.setDate(currentMonday.getDate() + (dir * 7));
+            currentAgendaKey = currentMonday.toISOString().split('T')[0];
+            renderAgenda(); 
+        }
+
+        // --- LÓGICA DE ESCOLAS & ALUNOS ---
 
         function openSchool(idx) {
             currSchool = idx; currWeek = 0;
@@ -592,24 +637,257 @@
 
         function renderWeeks() {
             const container = document.getElementById('week-tabs'); container.innerHTML = '';
+            
+            // Abas de Semanas
             appData.schools[currSchool].weeks.forEach((w, idx) => {
-                const btn = document.createElement('button'); let shortName = w.name; if(w.name.includes("-")) shortName = w.name.split("-")[0];
-                btn.className = `week-tab ${idx === currWeek ? 'active' : ''}`; btn.innerText = shortName; btn.onclick = () => { currWeek = idx; renderWeeks(); };
+                const btn = document.createElement('button'); 
+                let shortName = w.name; if(w.name.includes("-")) shortName = w.name.split("-")[0];
+                btn.className = `week-tab ${idx === currWeek ? 'active' : ''}`; 
+                btn.innerText = shortName; 
+                btn.onclick = () => { currWeek = idx; renderWeeks(); };
                 container.appendChild(btn);
-            }); renderForm();
+            });
+            
+            // Aba de Alunos (Separador)
+            const btnAlunos = document.createElement('button');
+            btnAlunos.className = `week-tab tab-special ${currWeek === 'students' ? 'active' : ''}`;
+            btnAlunos.innerHTML = '<i class="fas fa-users"></i> Alunos';
+            btnAlunos.onclick = () => { currWeek = 'students'; renderWeeks(); };
+            container.appendChild(btnAlunos);
+
+            if(currWeek === 'students') renderStudentsView();
+            else renderForm();
         }
 
         function addWeek() { const num = appData.schools[currSchool].weeks.length + 1; const newTopics = JSON.parse(JSON.stringify(genericTemplate)); appData.schools[currSchool].weeks.push({ id: Date.now(), name: `Semana ${num}`, content: { type: 'generic', data: {} }, extra: newTopics }); currWeek = appData.schools[currSchool].weeks.length - 1; save(); renderWeeks(); }
         function updateWeekName(val) { appData.schools[currSchool].weeks[currWeek].name = val; save(); renderWeeks(); }
 
+        // --- RENDERIZAÇÃO DO LEVANTAMENTO DE ALUNOS ---
+
+        function renderStudentsView() {
+            document.getElementById('week-title-edit').style.display = 'none';
+            document.getElementById('generic-buttons-container').style.display = 'none';
+            
+            const container = document.getElementById('form-container-inner');
+            container.innerHTML = `
+                <div class="section-card" id="student-form-section">
+                    <div class="section-title">Ficha de Mapeamento - Necessidades Específicas</div>
+                    
+                    <div class="row" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+                        <div style="flex:2; min-width:200px;">
+                            <label>Nome do Aluno</label>
+                            <input type="text" id="std_nome" placeholder="Nome completo">
+                        </div>
+                        <div style="flex:1; min-width:120px;">
+                            <label>Série/Ano</label>
+                            <input type="text" id="std_serie" placeholder="Ex: 5º Ano B">
+                        </div>
+                        <div style="flex:1; min-width:120px;">
+                            <label>Turno</label>
+                            <select id="std_turno">
+                                <option value="Manhã">Manhã</option>
+                                <option value="Tarde">Tarde</option>
+                                <option value="Integral">Integral</option>
+                                <option value="Noite">Noite</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+                        <div style="flex:1; min-width:200px;">
+                            <label>Professor(a) Fonte</label>
+                            <input type="text" id="std_prof" placeholder="Quem passou a informação?">
+                        </div>
+                        <div style="flex:1; min-width:200px;">
+                            <label>Status Atual</label>
+                            <select id="std_status">
+                                <option value="Em Investigação">Em Investigação</option>
+                                <option value="Laudado">Já Laudado (Tem Diagnóstico)</option>
+                                <option value="Suspeita da Escola">Suspeita da Escola (Sem ação da família)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+                        <div style="flex:1; min-width:200px;">
+                            <label>Hipótese ou Diagnóstico</label>
+                            <input type="text" id="std_hipotese" placeholder="Ex: TEA, TDAH, Atraso...">
+                        </div>
+                        <div style="flex:1; min-width:200px;">
+                            <label>Adesão da Família</label>
+                            <select id="std_familia">
+                                <option value="Boa Adesão">Boa Adesão</option>
+                                <option value="Parcial/Oscilante">Parcial / Oscilante</option>
+                                <option value="Resistente/Negação">Resistente / Negação</option>
+                                <option value="Desconhecido">Não sei informar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observações Relevantes (Breve)</label>
+                        <textarea id="std_obs" rows="2" placeholder="Ex: Família não aceita encaminhamento..."></textarea>
+                    </div>
+
+                    <div class="action-bar">
+                        <button class="btn" onclick="addStudent()">➕ Adicionar Aluno</button>
+                        <button class="btn-outline" style="color:#27ae60; border-color:#27ae60" onclick="exportStudentsCSV()">📥 Excel/CSV</button>
+                        <button class="btn-outline" style="color:#c0392b; border-color:#c0392b" onclick="exportStudentsPDF()">📄 Baixar PDF</button>
+                    </div>
+                </div>
+
+                <div id="pdf-content-area">
+                    <h2 style="text-align:center; font-size:1.4rem; color:var(--primary-dark); margin-bottom:20px;">Levantamento de Alunos - ${appData.schools[currSchool].name}</h2>
+                    <div class="student-table-container">
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Série</th>
+                                    <th>Status</th>
+                                    <th>Hipótese/Diag.</th>
+                                    <th>Família</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            renderStudentTable();
+        }
+
+        function addStudent() {
+            const nome = document.getElementById('std_nome').value;
+            if(!nome) return alert("Nome é obrigatório");
+
+            const newStudent = {
+                id: Date.now(),
+                nome: nome,
+                serie: document.getElementById('std_serie').value,
+                turno: document.getElementById('std_turno').value,
+                professor: document.getElementById('std_prof').value,
+                status: document.getElementById('std_status').value,
+                hipotese: document.getElementById('std_hipotese').value,
+                familia: document.getElementById('std_familia').value,
+                obs: document.getElementById('std_obs').value
+            };
+
+            if(!appData.schools[currSchool].students) appData.schools[currSchool].students = [];
+            appData.schools[currSchool].students.push(newStudent);
+            save();
+            
+            // Limpa campos principais, mantém contexto
+            document.getElementById('std_nome').value = '';
+            document.getElementById('std_hipotese').value = '';
+            document.getElementById('std_obs').value = '';
+            document.getElementById('std_nome').focus();
+            
+            renderStudentTable();
+            showToast();
+        }
+
+        function renderStudentTable() {
+            const tbody = document.getElementById('student-table-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            
+            const students = appData.schools[currSchool].students || [];
+
+            if(students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Nenhum aluno registrado.</td></tr>';
+                return;
+            }
+
+            students.forEach((s, idx) => {
+                let statusClass = 'status-suspeita';
+                if(s.status === 'Laudado') statusClass = 'status-laudado';
+                else if(s.status === 'Em Investigação') statusClass = 'status-investigacao';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            <strong>${s.nome}</strong>
+                            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">Turno: ${s.turno}</div>
+                        </td>
+                        <td>${s.serie}</td>
+                        <td><span class="status-badge ${statusClass}">${s.status}</span></td>
+                        <td>${s.hipotese}</td>
+                        <td>${s.familia}</td>
+                        <td>
+                            <button class="btn-danger" style="padding: 6px 10px;" onclick="removeStudent(${idx})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr style="background:#fcfcfc;">
+                        <td colspan="6" style="padding: 8px 12px; font-size:0.85rem; color:var(--text-muted); border-bottom:2px solid #f1f5f9;">
+                            <strong>Obs:</strong> ${s.obs || "Sem observações."} | <strong>Prof:</strong> ${s.professor || "-"}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function removeStudent(idx) {
+            if(confirm("Remover este aluno da lista?")) {
+                appData.schools[currSchool].students.splice(idx, 1);
+                save();
+                renderStudentTable();
+            }
+        }
+
+        function exportStudentsCSV() {
+            const students = appData.schools[currSchool].students || [];
+            if(students.length === 0) return alert("Lista vazia.");
+            
+            let csv = ["Nome,Série,Turno,Professor,Status,Hipótese,Família,Observações"];
+            students.forEach(s => {
+                const row = [
+                    `"${s.nome}"`, `"${s.serie}"`, `"${s.turno}"`, `"${s.professor}"`,
+                    `"${s.status}"`, `"${s.hipotese}"`, `"${s.familia}"`, `"${s.obs}"`
+                ];
+                csv.push(row.join(","));
+            });
+
+            const csvFile = new Blob(["\uFEFF" + csv.join("\n")], {type: "text/csv;charset=utf-8;"});
+            const link = document.createElement("a");
+            link.download = `Levantamento_${appData.schools[currSchool].name.replace(/\s/g,'_')}.csv`;
+            link.href = window.URL.createObjectURL(csvFile);
+            link.click();
+        }
+
+        function exportStudentsPDF() {
+            const element = document.getElementById('pdf-content-area');
+            const btns = document.querySelectorAll('.btn-danger'); // Esconder botões de excluir
+            btns.forEach(b => b.style.display = 'none');
+
+            const options = {
+                margin: 10,
+                filename: `Alunos_${appData.schools[currSchool].name}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(options).from(element).save().then(() => {
+                btns.forEach(b => b.style.display = 'inline-block'); // Volta botões
+            });
+        }
+
+
+        // --- FORMULÁRIOS DAS SEMANAS ---
+
         function renderForm() {
-            const week = appData.schools[currSchool].weeks[currWeek]; document.getElementById('week-title-edit').value = week.name;
+            document.getElementById('week-title-edit').style.display = 'block';
+            document.getElementById('generic-buttons-container').style.display = 'block';
+
+            const week = appData.schools[currSchool].weeks[currWeek]; 
+            document.getElementById('week-title-edit').value = week.name;
             const c = document.getElementById('form-container-inner'); c.innerHTML = '';
             if(week.content.type === 's1') formS1(week.content.data, c); else if(week.content.type === 's2') formS2(week.content.data, c); else if(week.content.type === 's3') formS3(week.content.data, c);
             if(!week.extra) week.extra = []; week.extra.forEach((t, idx) => formGeneric(t, idx, c));
         }
-
-        // --- FORMULÁRIOS COMPLETOS E RESTAURADOS (VISUAL ANTERIOR) ---
 
         function formS1(d, c) {
             c.innerHTML += `
