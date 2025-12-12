@@ -207,6 +207,45 @@
             .ts-row td:last-child { grid-column: 1 / -1; text-align: right !important; background: #f8fafc; padding: 10px !important; border-radius: 8px !important; margin-top: 5px; }
             .ts-row.holiday td.merged-cell { grid-column: 1 / -1; }
         }
+
+        /* --- NOVO: Estilos de Privacidade e Segurança --- */
+        .blur-sensitive {
+            filter: blur(6px);
+            transition: filter 0.3s;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        body.privacy-active .student-table td:first-child strong,
+        body.privacy-active .student-table td:nth-child(3),
+        body.privacy-active .student-table td:nth-child(4),
+        body.privacy-active input[type="text"], 
+        body.privacy-active textarea,
+        body.privacy-active #current-school-name {
+            filter: blur(6px);
+            opacity: 0.6;
+        }
+
+        .btn-privacy {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 40px; 
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            transition: 0.2s;
+            margin-right: 10px;
+        }
+        .btn-privacy.active {
+            background: var(--text-main);
+            color: white;
+            border-color: var(--text-main);
+        }
+
     </style>
 </head>
 <body>
@@ -237,6 +276,10 @@
                         <button id="btn-view-agenda" class="toggle-view-btn" onclick="switchMainView('agenda')"><i class="far fa-clock"></i> <span style="margin-left:5px">Ponto</span></button>
                     </div>
 
+                    <button class="btn-privacy" onclick="togglePrivacy()" title="Ocultar Nomes (Privacidade)">
+                        <i class="fas fa-eye-slash"></i>
+                    </button>
+
                     <button class="btn-save" onclick="saveManual()"><i class="fas fa-save"></i> Salvar</button>
                 </div>
 
@@ -249,6 +292,10 @@
                     </div>
                     
                     <div style="display:flex; gap:8px;">
+                         <button class="btn-privacy" onclick="togglePrivacy()" title="Ocultar Nomes (Privacidade)">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                        
                         <button class="btn-save" onclick="saveManual()"><i class="fas fa-save"></i> Salvar</button>
                         <button class="btn-outline" onclick="openMeetings()"><i class="fas fa-users-cog"></i></button>
                         <button class="btn-danger" onclick="deleteSchool()"><i class="fas fa-trash-alt"></i></button>
@@ -466,6 +513,25 @@
                 } else setupPass(input);
             } else setupPass(input);
         }
+        
+        async function verifyActionPassword() {
+            const input = prompt("🔒 Área Restrita.\nPor favor, confirme sua senha de acesso:");
+            if (!input) return false;
+            
+            // Pega o hash salvo
+            const saved = localStorage.getItem('psicoGestao_v10');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.security && parsed.security.hash) {
+                    const inputHash = await sha256(input);
+                    if (inputHash === parsed.security.hash) {
+                        return true;
+                    }
+                }
+            }
+            alert("Senha incorreta.");
+            return false;
+        }
 
         async function setupPass(pass) {
             if(pass.length < 4) return alert("Senha muito curta (min 4).");
@@ -666,20 +732,43 @@
                 container.appendChild(btn);
             });
             
-            // Aba de Alunos (Mapeamento)
-            const btnAlunos = document.createElement('button');
-            btnAlunos.className = `week-tab tab-special ${currWeek === 'students' ? 'active' : ''}`;
-            btnAlunos.innerHTML = '<i class="fas fa-list-ul"></i> Mapeamento';
-            btnAlunos.onclick = () => { currWeek = 'students'; renderWeeks(); };
-            container.appendChild(btnAlunos);
+            // Aba de Alunos (Mapeamento) - COM SENHA
+const btnAlunos = document.createElement('button');
+btnAlunos.className = `week-tab tab-special ${currWeek === 'students' ? 'active' : ''}`;
+btnAlunos.innerHTML = '<i class="fas fa-list-ul"></i> Mapeamento';
+btnAlunos.onclick = async () => { 
+    // Se já estiver na aba, não faz nada
+    if(currWeek === 'students') return;
 
-            // NOVA ABA: Escuta & Demandas
+    // Pede senha antes de entrar
+    const isAuthorized = await verifyActionPassword();
+    if (isAuthorized) {
+        currWeek = 'students'; 
+        renderWeeks(); 
+    }
+};
+container.appendChild(btnAlunos);
+
+            // NOVA ABA: Escuta & Demandas (COM TRAVA DE SENHA)
             const btnEscuta = document.createElement('button');
             btnEscuta.className = `week-tab tab-special-2 ${currWeek === 'attendance' ? 'active' : ''}`;
             btnEscuta.innerHTML = '<i class="fas fa-comments"></i> Escuta/Demandas';
-            btnEscuta.onclick = () => { currWeek = 'attendance'; renderWeeks(); };
+            
+            // --- LÓGICA DE SENHA AQUI ---
+            btnEscuta.onclick = async () => { 
+                // Se já estiver nela, não faz nada
+                if(currWeek === 'attendance') return;
+
+                // Pede senha antes de mudar
+                const isAuthorized = await verifyActionPassword();
+                if (isAuthorized) {
+                    currWeek = 'attendance'; 
+                    renderWeeks(); 
+                }
+            };
             container.appendChild(btnEscuta);
 
+            // Renderização do conteúdo
             if(currWeek === 'students') renderStudentsView();
             else if (currWeek === 'attendance') renderAttendanceView();
             else renderForm();
@@ -1162,6 +1251,39 @@
         
         function exportData() { const dataStr = JSON.stringify(appData); const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr); let link = document.createElement('a'); link.setAttribute('href', dataUri); link.setAttribute('download', 'Backup_PsiEscolar.json'); link.click(); }
         function importData(input) { const file = input.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (e) => { try { const d = JSON.parse(e.target.result); if(confirm("Substituir dados atuais?")) { appData=d; save(); location.reload(); } } catch(err) { alert("Arquivo inválido."); } }; reader.readAsText(file); }
+
+        async function togglePrivacy() {
+    const body = document.body;
+    
+    // Se já estiver com blur (ativo), pede senha para remover
+    if (body.classList.contains('privacy-active')) {
+        const isAuthorized = await verifyActionPassword();
+        if (isAuthorized) {
+            body.classList.remove('privacy-active');
+            updatePrivacyIcons(false);
+        }
+    } else {
+        // Se NÃO estiver com blur, ativa direto (segurança rápida)
+        body.classList.add('privacy-active');
+        updatePrivacyIcons(true);
+    }
+}
+
+// Função auxiliar para mudar o ícone do botão
+function updatePrivacyIcons(isActive) {
+    const btns = document.querySelectorAll('.btn-privacy');
+    btns.forEach(btn => {
+        if(isActive) {
+            btn.classList.add('active');
+            // Ícone de olho aberto indicando que clica para ver
+            btn.innerHTML = '<i class="fas fa-eye"></i>'; 
+        } else {
+            btn.classList.remove('active');
+            // Ícone de olho cortado indicando privacidade
+            btn.innerHTML = '<i class="fas fa-eye-slash"></i>'; 
+        }
+    });
+}
     </script>
 </body>
 </html>
